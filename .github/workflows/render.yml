@@ -1,0 +1,20 @@
+name: Render
+on: workflow_dispatch
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: unzip -q gravitasi-remotion.zip
+      - run: npm install
+        working-directory: gravity
+      - run: npx remotion render src/index.ts Gravitasi out/gravitasi-shorts.mp4 --codec=h264 --gl=swangle
+        working-directory: gravity
+      - uses: actions/upload-artifact@v4
+        with:
+          name: video
+          path: gravity/out/gravitasi-shorts.mp4
